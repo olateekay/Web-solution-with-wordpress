@@ -54,3 +54,21 @@ Verify that your VG has been created successfully by running `sudo vgs`
 
 ![alt text](image12.jpg)
 
+
+Use l`vcreate` utility to create 2 logical volumes. apps-lv (Use half of the PV size), and logs-lv Use the remaining space of the PV size. NOTE: apps-lv will be used to store data for the Website while, logs-lv will be used to store data for logs.
+
+`sudo lvcreate -n apps-lv -L 14G webdata-vg`
+
+
+![alt text](image13.jpg)
+
+
+`sudo lvcreate -n logs-lv -L 14G webdata-vg`
+
+
+![alt text](image14.jpg)
+
+Verify that your Logical Volume has been created successfully by running `sudo lvs`
+
+![alt text](image15.jpg)
+
