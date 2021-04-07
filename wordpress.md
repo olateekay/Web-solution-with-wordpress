@@ -30,3 +30,27 @@ Use `gdisk` utility to create a single partition on each of the 3 disks
 Install `lvm2 `package using `sudo yum install lvm2`. Run sudo lvmdiskscan command to check for available partitions.
 
 ![alt text](image8.jpg)
+
+
+Use `pvcreate` utility to mark each of 3 disks as physical volumes (PVs) to be used by LVM.
+
+NB: you can create for the 3 discs in one command;
+
+`sudo pvcreate /dev/xvdf1 /dev/xvdg1 /dev/xvdh1`
+
+![alt text](image9.jpg)
+
+Running `sudo pvs` shows you the physical volumes created
+
+![alt text](image10.jpg)
+
+Use `vgcreate` utility to add all 3 PVs to a volume group (VG). Name the VG webdata-vg
+
+`sudo vgcreate webdata-vg /dev/xvdh1 /dev/xvdg1 /dev/xvdf1`
+
+![alt text](image11.jpg)
+
+Verify that your VG has been created successfully by running `sudo vgs`
+
+![alt text](image12.jpg)
+
