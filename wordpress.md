@@ -72,3 +72,60 @@ Verify that your Logical Volume has been created successfully by running `sudo l
 
 ![alt text](image15.jpg)
 
+Verify the entire setup
+
+`sudo vgdisplay -v ` #*view complete setup - VG, PV, and LV*
+
+`sudo lsblk `
+
+![alt text](image16.jpg)
+
+![alt text](image17.jpg)
+
+Use mkfs.ext4 to format the logical volumes with `ext4` filesystem
+
+`sudo mkfs -t ext4 /dev/webdata-vg/apps-lv`
+
+`sudo mkfs -t ext4 /dev/webdata-vg/logs-lv`
+
+
+![alt text](image18.jpg)
+
+
+Create `/var/www/html` directory to store website files
+
+`sudo mkdir -p /var/www/html`
+
+![alt text](image19.jpg)
+
+Create `/home/recovery/logs` to store backup of log data
+
+
+`sudo mkdir -p /home/recovery/logs`
+
+
+
+Mount `/var/www/html` on apps-lv logical volume
+
+
+`sudo mount /dev/webdata-vg/apps-lv /var/www/html/
+`
+
+![alt text](image20.jpg)
+
+Use `rsync utility `to backup all the files in the log directory `/var/log` into `/home/recovery/logs` (This is required before mounting the file system)
+
+`sudo rsync -av /var/log/. /home/recovery/logs/`
+
+![alt text](image21.jpg)
+
+Mount `/var/log on logs-lv `logical volume. (Note that all the existing data on /var/log will be deleted. That is why step 15 above is very important)
+
+`sudo mount /dev/webdata-vg/logs-lv /var/log`
+
+![alt text](image22.jpg)
+
+Restore log files back into `/var/log` directory
+
+`sudo rsync -av /home/recovery/logs/log/. /var/log
+`
