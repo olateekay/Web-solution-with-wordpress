@@ -173,3 +173,40 @@ Launch a second RedHat EC2 instance that will have a role - ‘DB Server’ Repe
 ![alt text](image33.jpg)
 
 ![alt text](image34.jpg)
+
+![alt text](image36.jpg)
+
+# Step 3 — Install Wordpress on your Web Server EC2
+
+Update the repository
+
+`sudo yum -y update`
+
+Install wget, Apache and it’s dependencies
+
+`sudo yum -y install wget httpd php php-mysqlnd php-fpm php-json`
+
+Start Apache
+
+`sudo systemctl enable httpd`
+
+
+`sudo systemctl start httpd`
+
+
+To install PHP and it’s dependencies
+
+```
+sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+sudo yum install yum-utils http://rpms.remirepo.net/enterprise/remi-release-8.rpm
+sudo yum module list php
+sudo yum module reset php
+sudo yum module enable php:remi-7.4
+sudo yum install php php-opcache php-gd php-curl php-mysqlnd
+sudo systemctl start php-fpm
+sudo systemctl enable php-fpm
+setsebool -P httpd_execmem 1
+
+```
+
+![alt text](image37.jpg)
