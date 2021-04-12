@@ -210,3 +210,32 @@ setsebool -P httpd_execmem 1
 ```
 
 ![alt text](image37.jpg)
+
+Restart Apache
+
+`sudo systemctl restart httpd`
+
+Download wordpress and copy wordpress to `var/www/html`
+
+```
+mkdir wordpress
+cd   wordpress
+sudo wget http://wordpress.org/latest.tar.gz
+sudo tar xzvf latest.tar.gz
+sudo rm -rf latest.tar.gz
+cp wordpress/wp-config-sample.php wordpress/wp-config.php
+cp -R wordpress /var/www/html/
+```
+
+![alt text](image38.jpg)
+
+Configure SELinux Policies
+
+```
+sudo chown -R apache:apache /var/www/html/wordpress
+sudo chcon -t httpd_sys_rw_content_t /var/www/html/wordpress -R
+sudo setsebool -P httpd_can_network_connect=1
+
+```
+
+![alt text](image39.jpg)
