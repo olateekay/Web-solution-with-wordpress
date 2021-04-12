@@ -129,3 +129,47 @@ Restore log files back into `/var/log` directory
 
 `sudo rsync -av /home/recovery/logs/log/. /var/log
 `
+
+![alt text](image24.jpg)
+
+Update `/etc/fstab `file so that the mount configuration will persist after restart of the server.
+
+The UUID of the device will be used to update the `/etc/fstab` file;
+
+`sudo blkid`
+
+![alt text](image24.jpg)
+
+`sudo vi /etc/fstab`
+
+Update `/etc/fstab` in this format using your own UUID and remember to remove the leading and ending quotes.
+
+![alt text](image26.jpg)
+
+Test the configuration and reload the daemon
+
+`sudo mount -a`
+
+`sudo systemctl daemon-reload`
+
+Verify your setup by running `df -h`, output must look like this:
+
+![alt text](image28.jpg)
+
+
+# Step 2 — Prepare the Database Server
+
+Launch a second RedHat EC2 instance that will have a role - ‘DB Server’ Repeat the same steps as for the Web Server, but instead of `apps-lv` create `db-lv` and mount it to `/db` directory instead of `/var/www/html/`.
+
+
+![alt text](image29.jpg)
+
+![alt text](image30.jpg)
+
+![alt text](image31.jpg)
+
+![alt text](image32.jpg)
+
+![alt text](image33.jpg)
+
+![alt text](image34.jpg)
