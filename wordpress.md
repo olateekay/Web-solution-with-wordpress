@@ -256,6 +256,8 @@ sudo systemctl enable mysqld
 
 ```
 
+![alt text](image40.jpg)
+
 # Step 5 — Configure DB to work with WordPress
 
 ```
@@ -267,3 +269,31 @@ FLUSH PRIVILEGES;
 SHOW DATABASES;
 exit
 ```
+
+
+
+# Step 6 — Configure WordPress to connect to remote database.
+
+
+Hint: Do not forget to open MySQL port 3306 on DB Server EC2. For extra security, you shall allow access to the DB server ONLY from your Web Server’s IP address, so in the Inbound Rule configuration specify source as /32
+
+
+
+
+Install MySQL client and test that you can connect from your Web Server to your DB server by using `mysql-client`
+
+```
+sudo yum install mysql
+sudo mysql -u admin -p -h <DB-Server-Private-IP-address>
+```
+
+Verify if you can successfully execute S`HOW DATABASES;` command and see a list of existing databases.
+
+
+![alt text](image42.jpg)
+
+Try to access from your browser the link to your WordPress `http://<Web-Server-Public-IP-Address>`
+
+![alt text](image43.jpg)
+
+![alt text](image44.jpg)
