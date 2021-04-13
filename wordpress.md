@@ -21,15 +21,15 @@ Use `df -h` command to see all mounts and free space on your server
 
 Use `gdisk` utility to create a single partition on each of the 3 disks
 
-![alt text](image5.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image5.png)
 
-![alt text](image6.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image6.png)
 
-![alt text](image7.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image7.png)
 
 Install `lvm2 `package using `sudo yum install lvm2`. Run sudo lvmdiskscan command to check for available partitions.
 
-![alt text](image8.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image8.png)
 
 
 Use `pvcreate` utility to mark each of 3 disks as physical volumes (PVs) to be used by LVM.
@@ -38,21 +38,21 @@ NB: you can create for the 3 discs in one command;
 
 `sudo pvcreate /dev/xvdf1 /dev/xvdg1 /dev/xvdh1`
 
-![alt text](image9.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image9.png)
 
 Running `sudo pvs` shows you the physical volumes created
 
-![alt text](image10.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image10.png)
 
 Use `vgcreate` utility to add all 3 PVs to a volume group (VG). Name the VG webdata-vg
 
 `sudo vgcreate webdata-vg /dev/xvdh1 /dev/xvdg1 /dev/xvdf1`
 
-![alt text](image11.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image11.png)
 
 Verify that your VG has been created successfully by running `sudo vgs`
 
-![alt text](image12.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image12.png)
 
 
 Use l`vcreate` utility to create 2 logical volumes. apps-lv (Use half of the PV size), and logs-lv Use the remaining space of the PV size. NOTE: apps-lv will be used to store data for the Website while, logs-lv will be used to store data for logs.
@@ -60,17 +60,17 @@ Use l`vcreate` utility to create 2 logical volumes. apps-lv (Use half of the PV 
 `sudo lvcreate -n apps-lv -L 14G webdata-vg`
 
 
-![alt text](image13.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image13.png)
 
 
 `sudo lvcreate -n logs-lv -L 14G webdata-vg`
 
 
-![alt text](image14.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image14.png)
 
 Verify that your Logical Volume has been created successfully by running `sudo lvs`
 
-![alt text](image15.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image15.png)
 
 Verify the entire setup
 
@@ -78,9 +78,9 @@ Verify the entire setup
 
 `sudo lsblk `
 
-![alt text](image16.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image16.png)
 
-![alt text](image17.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image17.png)
 
 Use mkfs.ext4 to format the logical volumes with `ext4` filesystem
 
@@ -89,14 +89,14 @@ Use mkfs.ext4 to format the logical volumes with `ext4` filesystem
 `sudo mkfs -t ext4 /dev/webdata-vg/logs-lv`
 
 
-![alt text](image18.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image18.png)
 
 
 Create `/var/www/html` directory to store website files
 
 `sudo mkdir -p /var/www/html`
 
-![alt text](image19.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image19.png)
 
 Create `/home/recovery/logs` to store backup of log data
 
@@ -111,26 +111,26 @@ Mount `/var/www/html` on apps-lv logical volume
 `sudo mount /dev/webdata-vg/apps-lv /var/www/html/
 `
 
-![alt text](image20.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image20.png)
 
 Use `rsync utility `to backup all the files in the log directory `/var/log` into `/home/recovery/logs` (This is required before mounting the file system)
 
 `sudo rsync -av /var/log/. /home/recovery/logs/`
 
-![alt text](image21.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image21.png)
 
 Mount `/var/log on logs-lv `logical volume. (Note that all the existing data on /var/log will be deleted. That is why step 15 above is very important)
 
 `sudo mount /dev/webdata-vg/logs-lv /var/log`
 
-![alt text](image22.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image22.png)
 
 Restore log files back into `/var/log` directory
 
 `sudo rsync -av /home/recovery/logs/log/. /var/log
 `
 
-![alt text](image24.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image23.png)
 
 Update `/etc/fstab `file so that the mount configuration will persist after restart of the server.
 
@@ -138,13 +138,13 @@ The UUID of the device will be used to update the `/etc/fstab` file;
 
 `sudo blkid`
 
-![alt text](image24.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image24.png)
 
 `sudo vi /etc/fstab`
 
 Update `/etc/fstab` in this format using your own UUID and remember to remove the leading and ending quotes.
 
-![alt text](image26.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image25.png)
 
 Test the configuration and reload the daemon
 
@@ -154,7 +154,7 @@ Test the configuration and reload the daemon
 
 Verify your setup by running `df -h`, output must look like this:
 
-![alt text](image28.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image28.png)
 
 
 # Step 2 — Prepare the Database Server
@@ -162,19 +162,19 @@ Verify your setup by running `df -h`, output must look like this:
 Launch a second RedHat EC2 instance that will have a role - ‘DB Server’ Repeat the same steps as for the Web Server, but instead of `apps-lv` create `db-lv` and mount it to `/db` directory instead of `/var/www/html/`.
 
 
-![alt text](image29.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image29.png)
 
-![alt text](image30.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image30.png)
 
-![alt text](image31.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image31.png)
 
-![alt text](image32.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image32.png)
 
-![alt text](image33.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image33.png)
 
-![alt text](image34.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image34.png)
 
-![alt text](image36.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image36.png)
 
 # Step 3 — Install Wordpress on your Web Server EC2
 
@@ -209,7 +209,7 @@ setsebool -P httpd_execmem 1
 
 ```
 
-![alt text](image37.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image37.png)
 
 Restart Apache
 
@@ -227,7 +227,7 @@ cp wordpress/wp-config-sample.php wordpress/wp-config.php
 cp -R wordpress /var/www/html/
 ```
 
-![alt text](image38.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image38.png)
 
 # Configure SELinux Policies
 
@@ -238,7 +238,7 @@ sudo setsebool -P httpd_can_network_connect=1
 
 ```
 
-![alt text](image39.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image39.png)
 
 
 # Step 4 — Install MySQL on your DB Server EC2
@@ -256,7 +256,7 @@ sudo systemctl enable mysqld
 
 ```
 
-![alt text](image40.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image40.png)
 
 # Step 5 — Configure DB to work with WordPress
 
@@ -290,10 +290,10 @@ sudo mysql -u admin -p -h <DB-Server-Private-IP-address>
 Verify if you can successfully execute S`HOW DATABASES;` command and see a list of existing databases.
 
 
-![alt text](image42.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image42.png)
 
 Try to access from your browser the link to your WordPress `http://<Web-Server-Public-IP-Address>`
 
-![alt text](image43.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image43.png)
 
-![alt text](image44.jpg)
+![alt text](https://github.com/olateekay/Web-solution-with-wordpress/blob/main/images/image44.png)
